@@ -17,13 +17,14 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.By;
 
-public class HelloWorld {
+public class MercuryDemo {
 
-	private static final String FILE_NAME = "C:/Users/Dinesh.IN/Downloads/form1.xlsx";
+	private static final String FILE_NAME = "C:/Users/Dinesh.IN/Downloads/Userpswdcred.xlsx";
 	static String username;
 	static String password;
 	public List<Bean> getReadXLData(Iterator<Row> iterator ) {
 		List <Bean> li=new ArrayList<Bean>();
+		int i=0;
 
 		try {
 
@@ -32,6 +33,7 @@ public class HelloWorld {
 				Row currentRow = iterator.next();
 				Iterator<Cell> cellIterator = currentRow.iterator();
 				Bean bean= new Bean();
+			
 				List<String> list=new ArrayList<>();
 				while (cellIterator.hasNext()) {
 
@@ -45,12 +47,17 @@ public class HelloWorld {
 					}
 
 				}
+				
+				if(i!=0) {
 				bean.setUserName(list.size()>0?list.get(0):"");
 				bean.setPassword(list.size()>1?list.get(1):"");
 				bean.setResult(list.size()>2?list.get(2):"");
+				
 				li.add(bean);
-				System.out.println();
-
+				
+				System.out.println();}
+				
+				i++;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,7 +69,7 @@ public class HelloWorld {
 
 	public static void main(String[] args) throws InterruptedException {
 
-		HelloWorld hl=new HelloWorld();
+		MercuryDemo hl=new MercuryDemo();
 		List<Bean> li=new ArrayList<Bean>();
 		XSSFSheet datatypeSheet = null;
 
@@ -112,7 +119,8 @@ public class HelloWorld {
 					bean.setResult("Fail");
 
 				}
-				Row row = datatypeSheet.getRow(rownum);
+				
+				Row row = datatypeSheet.getRow(rownum+1);
 				Cell cell=row.createCell(2);
 				cell.setCellValue(bean.getResult());
 				rownum++;
@@ -121,14 +129,13 @@ public class HelloWorld {
 			FileOutputStream outputStream = new FileOutputStream(new File(FILE_NAME));
 
 			//write data in the excel file
-
+			
 			workbook.write(outputStream);
-
+			
 			//close output stream
 
 			outputStream.close();
 			driver.close();
-
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
